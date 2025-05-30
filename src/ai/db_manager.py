@@ -19,4 +19,4 @@ def create_vector_db(data_base_path: str, db_path: str):
         embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-mpnet-base-v2")
         db = Chroma.from_texts(chunks, embeddings, persist_directory=db_path)
         db.persist()
-    return db
+    return db, embeddings
