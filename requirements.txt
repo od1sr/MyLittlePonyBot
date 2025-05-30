@@ -1,0 +1,4 @@
+# python 3.11.9
+# uisng python modules
+langchain=0.3.43
+aiogram=3.1.1
