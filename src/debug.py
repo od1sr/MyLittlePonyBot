@@ -1,10 +1,18 @@
 from colorama import Fore
 
-def start_vectorize():
-    print(Fore.YELLOW + "Vectorizing..." + Fore.RESET)
+def DEBUG_start_pdf_loading():
+    print(f"{Fore.YELLOW}[DEBUG]{Fore.RESET} Загрузка PDF ...")
 
-def vectorize_file(file_name: str):
-    print(Fore.BLACK + f"Vectorizing {file_name}..." + Fore.RESET)
+def DEBUG_founded_pdfs(pdf_files):
+    print(f"{Fore.GREEN}[DEBUG]{Fore.RESET} Найдено {pdf_files} PDF-файлов.")
 
-def vectorize_finish(ms):
-    print(Fore.GREEN + f"Vectorizing finished in {ms}ms" + Fore.RESET)
+def DEBUG_pdf_mathing():
+    print(f"{Fore.YELLOW}[DEBUG]{Fore.RESET} Обработка PDF ...")
+
+
+def DEBUG_prepare_chunks():
+    print(f"{Fore.YELLOW}[DEBUG]{Fore.RESET} Подготовка чанков для векторной базы ...")
+
+def DEBUG_prepare_indexing(all_cunks):
+    print(f"{Fore.YELLOW}[DEBUG]{Fore.RESET} Подготовка к индексации для векторной базы ...")
+    print(f"{Fore.BLACK} | Количество чанков {all_cunks} {Fore.RESET}")
