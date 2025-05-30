@@ -28,3 +28,8 @@ def create_vector_db(data_base_path: str, db_path: str):
         _et = time()
         vectorize_finish(_et - _st)
     return db
+
+def get_db(db_path: str):
+    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-mpnet-base-v2")
+    db = Chroma(persist_directory=db_path, embedding_function=embeddings)
+    return db
