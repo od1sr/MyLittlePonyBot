@@ -4,3 +4,4 @@ langchain=0.3.43
 aiogram=3.1.1
 langchain-community=0.3.24
 pypdf=5.5.0
+chromadb=1.0.11
