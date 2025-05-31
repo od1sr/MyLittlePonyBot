@@ -1,7 +1,7 @@
 # python 3.11.9
 # uisng python modules
 
-aiogram==3.13.1
+aiogram==3.20.0.post0
 langchain-community==0.3.24
 pypdf==5.5.0
 chromadb==1.0.11

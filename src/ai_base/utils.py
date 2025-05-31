@@ -64,7 +64,7 @@ def chunk_text(text: str, chunk_size: int = ConvertingConfig.CHUNK_SIZE) -> List
 
 def is_db_created(path: str = "./") -> bool:
     """Проверяет, создана ли база данных"""
-    return os.path.exists(path+ConvertingConfig.CHROMA_DB_PATH)
+    return os.path.exists(path)
 
 
 
@@ -206,5 +206,3 @@ def init_db():
         client = get_db_collection()
 
     return client
-
-init_db()
