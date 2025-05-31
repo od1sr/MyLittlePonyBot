@@ -16,7 +16,7 @@ RESTERICTIONS = {
     "1": "без лактозы", "2": "без глютена", "3": "вегетарианское"
 }
 
-def request_with_gemini(prompt: str, api_key: str, proxies: dict = None) -> str:
+def request_with_gemini(prompt: str) -> str:
     """
     Отправляет запрос к Gemini API с обработкой ошибок
 
@@ -28,7 +28,7 @@ def request_with_gemini(prompt: str, api_key: str, proxies: dict = None) -> str:
     Возвращает:
         str: Ответ от API или пустую строку в случае ошибки
     """
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={api_key}"
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={API_KEY}"
     headers = {"Content-Type": "application/json"}
     data = {"contents": [{"parts": [{"text": prompt}]}]}
 
@@ -37,7 +37,7 @@ def request_with_gemini(prompt: str, api_key: str, proxies: dict = None) -> str:
             url,
             headers=headers,
             data=json.dumps(data),
-            proxies=proxies,
+            proxies=PROXY,
             timeout=30
         )
         response.raise_for_status()

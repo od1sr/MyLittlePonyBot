@@ -1,25 +1,19 @@
 from aiogram import Router, Bot
-from aiogram.filters import Command
 from aiogram.types import Message, User
 from aiogram.fsm.context import FSMContext
 from Classes.user import UserProfile, UserRation
 from ..states import UserProfileStates
 from .. import localizations as lc
-from ..keyboards import ProfileKeyboards, MainKeyboard
+from ..keyboards import ProfileKeyboards
 from aiogram import F
 from aiogram.types import Message, CallbackQuery
 from Classes.enums import Goal
 from db.services import *
 from db.session import async_session
 from src.ai_base.ai import generate_ration_for_week
-from chromadb import api
 from ..utils import safe_send_text, safe_send_ration_for_week_response
 
 user_router = Router()
-
-@user_router.message(Command("start"))
-async def start(message: Message, event_from_user: User):
-    await message.answer(lc.start_message.format(event_from_user.full_name), reply_markup=MainKeyboard())
 
 @user_router.callback_query(F.data == "edit_profile")
 async def edit_profile_callback(call: CallbackQuery, state: FSMContext, event_from_user: User):
