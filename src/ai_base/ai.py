@@ -16,15 +16,22 @@ RESTERICTIONS = {
     "1": "без лактозы", "2": "без глютена", "3": "вегетарианское"
 }
 
-
-
 def request_with_gemini(prompt: str, api_key: str, proxies: dict = None) -> str:
-    """Отправляет запрос к Gemini API с обработкой ошибок"""
+    """
+    Отправляет запрос к Gemini API с обработкой ошибок
+
+    Аргументы:
+        prompt (str): Текст запроса к API
+        api_key (str): Ключ API для аутентификации
+        proxies (dict, optional): Настройки прокси-сервера
+
+    Возвращает:
+        str: Ответ от API или пустую строку в случае ошибки
+    """
     url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={api_key}"
     headers = {"Content-Type": "application/json"}
     data = {"contents": [{"parts": [{"text": prompt}]}]}
 
-    
     try:
         response = requests.post(
             url,
@@ -42,7 +49,21 @@ def request_with_gemini(prompt: str, api_key: str, proxies: dict = None) -> str:
         ...
                                                     
 def generate_ration_for_week(mass: float, height: float, age: int, gender: str, activity: str, purpose: str, resteriction = None )-> str:
-    """Генерирует рацион для человека"""
+    """
+    Генерирует рацион питания на неделю для человека
+
+    Аргументы:
+        mass (float): Масса тела в килограммах
+        height (float): Рост в сантиметрах
+        age (int): Возраст в годах
+        gender (str): Пол
+        activity (str): Уровень физической активности
+        purpose (str): Цель составления рациона
+        resteriction (str, optional): Ограничения по питанию
+
+    Возвращает:
+        str: Сгенерированный рацион питания на неделю
+    """
     prompt = f"""
     Составьте рацион на неделю для человека с такими параметрами (ограничения {resteriction}):
     Масса тела: {mass} кг
@@ -71,9 +92,16 @@ def generate_ration_for_week(mass: float, height: float, age: int, gender: str, 
     """
     return request_with_gemini(prompt, API_KEY, PROXY)
 
-
 def get_data_for_ration_with_week(string: str):
-    """Извлекает данные из строки"""
+    """
+    Извлекает структурированные данные о рационе питания из текстовой строки
+
+    Аргументы:
+        string (str): Строка с данными о рационе
+
+    Возвращает:
+        dict: Словарь с данными о рационе, разбитыми по дням недели и приемам пищи
+    """
     data = {}
     parts = string.split("===")
     days = parts[0].strip().split("-")
@@ -101,9 +129,23 @@ def get_data_for_ration_with_week(string: str):
         
     return data
 
-
 def generate_retion_for_day(day: str, mass: float, height: float, age: int, gender: str, activity: str, purpose: str, resteriction = None)-> str:
-    """Генерирует рацион для человека"""
+    """
+    Генерирует рацион питания на один день для человека
+
+    Аргументы:
+        day (str): День недели
+        mass (float): Масса тела в килограммах
+        height (float): Рост в сантиметрах
+        age (int): Возраст в годах
+        gender (str): Пол
+        activity (str): Уровень физической активности
+        purpose (str): Цель составления рациона
+        resteriction (str, optional): Ограничения по питанию
+
+    Возвращает:
+        str: Сгенерированный рацион питания на день
+    """
     prompt = f"""
     Составьте рацион на день для человека с такими параметрами (ограничения {resteriction}):
     День недели: {day}
@@ -128,15 +170,21 @@ def generate_retion_for_day(day: str, mass: float, height: float, age: int, gend
 
     тут выведи дополнительные рекомендации
 
-
     не пиши ничего лишнего не добавляй никаких лишних символов
     только по делу
-
 """
     return request_with_gemini(prompt, API_KEY, PROXY)
 
 def get_data_for_ration_with_one_day(string: str):
-    """Извлекает данные из строки"""
+    """
+    Извлекает структурированные данные о рационе питания на один день из текстовой строки
+
+    Аргументы:
+        string (str): Строка с данными о рационе
+
+    Возвращает:
+        dict: Словарь с данными о рационе, разбитыми по приемам пищи
+    """
     data = {}
     parts = string.split("===")
     days = parts[0].strip().split("-")

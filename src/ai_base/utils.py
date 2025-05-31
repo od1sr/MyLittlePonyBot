@@ -22,7 +22,7 @@ class ConvertingConfig:
     CHROMA_COLLECTION = "nutrition_rag"
     CHUNK_SIZE = 1000
     EMBEDDING_MODEL = "all-MiniLM-L6-v2"
-    CHROMA_DB_PATH = "db"
+    CHROMA_DB_PATH = "db/sessions"
 
 
 
@@ -84,7 +84,7 @@ def get_db_collection() -> api.Collection:
 
 def create_vector_db(texts: List[str]) -> Client:
     """Создает векторную базу данных"""
-    client = PersistentClient(path="db")
+    client = PersistentClient(path=ConvertingConfig.CHROMA_DB_PATH)
     # Используем встроенную функцию для эмбеддингов
     embedding_func = embedding_functions.SentenceTransformerEmbeddingFunction(
         model_name=ConvertingConfig.EMBEDDING_MODEL
@@ -196,3 +196,15 @@ def rag_answer(question: str, collection: Client) -> Optional[str]:
 
     return prompt
 
+
+
+def init_db():
+    if not is_db_created(ConvertingConfig.CHROMA_DB_PATH):
+        text = load_and_process_pdfs(ConvertingConfig.PDF_FOLDER)
+        client = create_vector_db(text)
+    else:
+        client = get_db_collection()
+
+    return client
+
+init_db()
