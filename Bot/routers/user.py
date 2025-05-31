@@ -155,7 +155,7 @@ async def my_diet(message: Message):
         return
     text = f"Ваш рацион:\n{ration.ration}"
 
-    await safe_send_text(message.answer, text, parse_mode='markdown')
+    await safe_send_ration_for_week_response(message.answer, text, parse_mode='markdown')
 
 
 @user_router.message(F.text == "📊 Моя динамика")

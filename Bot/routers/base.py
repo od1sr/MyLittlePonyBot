@@ -7,7 +7,7 @@ from db.session import async_session
 from Classes.user import UserProfile
 from db.services import load_user_profile
 from src.ai_base.ai import request_with_gemini
-
+from ..utils import safe_send_ration_for_week_response
 base_router = Router()
 prompts_router = Router()
 
@@ -34,8 +34,8 @@ async def send_prompt_to_ai(message: Message, event_from_user: User):
 
             text += f"<b>{field.description}</b>: {field_value}\n"
 
-    prompt = message.text + "(Обо мне:\n" + text + ")"
+    prompt = message.text + "\n(Обо мне:\n" + text + ")"
 
     response = request_with_gemini(prompt)
 
-    await message.answer(response)
+    await safe_send_ration_for_week_response(message.answer, response, parse_mode='markdown')
