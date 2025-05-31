@@ -11,6 +11,7 @@ async def save_user_profile(profile: UserProfile, session: AsyncSession):
         db_obj.age = profile.age
         db_obj.gender = profile.gender
         db_obj.goal = profile.goal
+        db_obj.activity = profile.activity
     else:
         db_obj = UserProfileDB(
             user_id=profile.user_id,
@@ -18,7 +19,8 @@ async def save_user_profile(profile: UserProfile, session: AsyncSession):
             height=profile.height,
             age=profile.age,
             gender=profile.gender,
-            goal=profile.goal
+            goal=profile.goal,
+            activity=profile.activity
         )
         session.add(db_obj)
 
@@ -34,6 +36,7 @@ async def load_user_profile(user_id: int, session: AsyncSession) -> UserProfile 
             "age": db_obj.age,
             "gender": db_obj.gender,
             "goal": db_obj.goal,
+            "activity": db_obj.activity
         })
     
     return None

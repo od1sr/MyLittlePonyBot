@@ -185,3 +185,4 @@ cython_debug/
 **/*.bin
 **/*.sqlite3
 **/*.pickle
+db/sessions/chroma.sqlite3

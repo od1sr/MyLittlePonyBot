@@ -1,4 +1,4 @@
-from aiogram import Router
+from aiogram import Router, Bot
 from aiogram.filters import Command
 from aiogram.types import Message, User
 from aiogram.fsm.context import FSMContext
@@ -60,6 +60,8 @@ async def show_profile(send_func, state: FSMContext, profile: UserProfile):
                 field_value = field_value.description
             elif field_name == "gender":
                 field_value = 'Мужской' if field_value == 'm' else 'Женский'
+            elif field_name == "activity":
+                field_value = 'Да' if field_value else 'Нет'
 
             text += f"<b>{field.description}</b>: {field_value}\n"
     
@@ -115,17 +117,38 @@ async def choose_goal(call: CallbackQuery, state: FSMContext, event_from_user: U
     goal = Goal.from_index(int(call.data.split(";")[2]))
     await state.update_data(goal=goal)
 
+    await call.message.edit_text(
+        lc.UserProfile.enter_activity, reply_markup=ProfileKeyboards.EditActivityKb(False), parse_mode='HTML')
+    await state.set_state(UserProfileStates.activity)
+
+@user_router.callback_query(F.data.startswith("edit_profile;activity;"), UserProfileStates.activity)
+async def choose_activity(call: CallbackQuery, state: FSMContext, event_from_user: User, bot: Bot):
+    activity = int(call.data.split(";")[2])
+    await state.update_data(activity=activity)
+
     profile = UserProfile(**await state.get_data())
+    
     await state.clear()
 
     async with async_session() as session:
         await save_user_profile(profile, session)
 
     await show_profile(call.message.edit_text, state, profile)
-    ration = generate_ration_for_week(profile)
+    ration = generate_ration_for_week(
+        profile.weight, 
+        profile.height, 
+        profile.age, 
+        'мужской' if profile.gender == 'm' else 'женский', 
+        profile.goal.description, 
+        activity
+    )
+
+    await safe_send_text(lambda text: bot.send_message(event_from_user.id, text), "Ваш рацион:\n" + ration,
+        parse_mode='markdown')
 
     async with async_session() as session:
-        await save_user_ration(UserRation(event_from_user.id, ration), session)
+        await save_user_ration(UserRation(user_id = event_from_user.id, ration = ration), session)
+    
     
 
 @user_router.message(F.text == "🥩 мой рацион")
@@ -136,9 +159,9 @@ async def my_diet(message: Message):
     if ration is None:
         await message.answer("У вас еще нет рациона питания")
         return
-    text = f"Ваш рацион:\n{ration}"
+    text = f"Ваш рацион:\n{ration.ration}"
 
-    await safe_send_text(text)
+    await safe_send_text(message.answer, text, parse_mode='markdown')
 
 
 @user_router.message(F.text == "📊 Моя динамика")

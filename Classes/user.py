@@ -10,6 +10,7 @@ class UserProfile(BaseModel):
     age: int = Field(..., description="Возраст")
     gender: str = Field(..., description="Пол") # 'm'/'f'
     goal: Goal = Field(..., description="Цель")
+    activity: bool = Field(..., description="Активный образ жизни")
 
     @field_validator("weight")
     @classmethod

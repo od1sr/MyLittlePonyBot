@@ -29,3 +29,4 @@ class Goal(str, Enum):
             cls.maintain,
             cls.gain
         ][idx]
+    

@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, BigInteger, Float, String, Text, Enum as SQLAEnum
+from sqlalchemy import (
+    Column, Integer, BigInteger, Float, String, Text, Enum as SQLAEnum, Boolean)
 from db.base import Base
 from Classes.enums import Goal
 
@@ -12,6 +13,7 @@ class UserProfileDB(Base):
     age = Column(Integer, nullable=False)
     gender = Column(String, nullable=False)
     goal = Column(SQLAEnum(Goal, name="goal_enum"), nullable=False)
+    activity = Column(Boolean, nullable=False)
 
 class UserRationDB(Base):
     __tablename__ = "user_rations"

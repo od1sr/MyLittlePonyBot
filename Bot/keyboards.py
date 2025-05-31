@@ -67,3 +67,13 @@ class ProfileKeyboards:
     def RebuildMyRationBtn() -> InlineKeyboardButton:
         return InlineKeyboardButton(text="🥩 Перестроить мой рацион", callback_data="rebuild_ration")
     
+    @staticmethod
+    def EditActivityKb(with_back_btn: bool = True) -> InlineKeyboardMarkup:
+        kb = InlineKeyboardBuilder()
+        kb.button(text="Да", callback_data="edit_profile;activity;1")
+        kb.button(text="Нет", callback_data="edit_profile;activity;0")
+
+        if with_back_btn:
+            kb.add(ProfileKeyboards.BackToEditProfileBtn())
+
+        return kb.as_markup()
