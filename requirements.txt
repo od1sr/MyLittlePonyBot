@@ -1,9 +1,11 @@
 # python 3.11.9
 # uisng python modules
-langchain=0.3.25
-aiogram=3.20.0.post0
-langchain-community=0.3.24
-pypdf=5.5.0
-chromadb=1.0.11
-tqdm=4.67.1
-pypdf2=3.0.1
+
+aiogram==3.13.1
+langchain-community==0.3.24
+pypdf==5.5.0
+chromadb==1.0.11
+pydantic==2.9.2
+sqlalchemy==2.0.41
+asyncpg==0.30.0
+aiosqlite==0.21.0
