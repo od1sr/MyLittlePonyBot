@@ -56,3 +56,7 @@ class UserProfile(BaseModel):
             raise ValueError("Gender must be 'm' or 'f'")
 
         return 'm' if v in ['m', 'м'] else 'f'
+    
+class UserRation(BaseModel):
+    user_id: int
+    ration: str

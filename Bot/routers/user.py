@@ -2,15 +2,18 @@ from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import Message, User
 from aiogram.fsm.context import FSMContext
-from Classes.UserProfile import UserProfile
+from Classes.user import UserProfile, UserRation
 from ..states import UserProfileStates
 from .. import localizations as lc
 from ..keyboards import ProfileKeyboards, MainKeyboard
 from aiogram import F
 from aiogram.types import Message, CallbackQuery
 from Classes.enums import Goal
-from db.services import save_user_profile, load_user_profile
+from db.services import *
 from db.session import async_session
+from src.ai_base.ai import generate_ration_for_week
+from chromadb import api
+from ..utils import safe_send_text
 
 user_router = Router()
 
@@ -108,7 +111,7 @@ async def choose_gender(call: CallbackQuery, state: FSMContext):
     await state.set_state(UserProfileStates.goal)
 
 @user_router.callback_query(F.data.startswith("edit_profile;goal;"), UserProfileStates.goal)
-async def choose_goal(call: CallbackQuery, state: FSMContext):
+async def choose_goal(call: CallbackQuery, state: FSMContext, event_from_user: User):
     goal = Goal.from_index(int(call.data.split(";")[2]))
     await state.update_data(goal=goal)
 
@@ -118,16 +121,33 @@ async def choose_goal(call: CallbackQuery, state: FSMContext):
     async with async_session() as session:
         await save_user_profile(profile, session)
 
-    await show_profile(call.message.edit_text, state)
-    
-    # TODO: генерация рациона питания
+    await show_profile(call.message.edit_text, state, profile)
+    ration = generate_ration_for_week(profile)
+
+    async with async_session() as session:
+        await save_user_ration(UserRation(event_from_user.id, ration), session)
     
 
 @user_router.message(F.text == "🥩 мой рацион")
 async def my_diet(message: Message):
-    await message.answer("Ваш рацион:") # TODO: добавить рацион
+    async with async_session() as session:
+        ration = await load_user_ration(message.from_user.id, session)
+    
+    if ration is None:
+        await message.answer("У вас еще нет рациона питания")
+        return
+    text = f"Ваш рацион:\n{ration}"
+
+    await safe_send_text(text)
+
 
 @user_router.message(F.text == "📊 Моя динамика")
 async def my_dynamics(message: Message):
     await message.answer("Ваша динамика:") # TODO: добавить график
 
+@user_router.callback_query(F.data == "edit_profile;goal")
+async def edit_goal_callback(call: CallbackQuery, state: FSMContext, event_from_user: User):
+    async with async_session() as session:
+        profile = await load_user_profile(event_from_user.id, session)
+
+    

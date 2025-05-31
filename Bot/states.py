@@ -6,3 +6,9 @@ class UserProfileStates(StatesGroup):
     height = State()
     gender = State()
     goal = State()
+
+    edit_weight = State()
+    edit_age = State()
+    edit_height = State()
+    edit_gender = State()
+    edit_goal = State()

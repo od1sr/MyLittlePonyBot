@@ -9,3 +9,5 @@ pydantic==2.9.2
 sqlalchemy==2.0.41
 asyncpg==0.30.0
 aiosqlite==0.21.0
+pypdf2==3.0.1
+colorama==0.4.6
