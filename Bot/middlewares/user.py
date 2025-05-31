@@ -1,7 +1,7 @@
 from aiogram.dispatcher.middlewares.base import BaseMiddleware
 from typing import Callable, Dict, Any
 from aiogram.types import TelegramObject
-from Classes.UserProfile import UserProfile
+from Classes.user import UserProfile
 from db.services import load_user_profile
 from db.session import async_session
 

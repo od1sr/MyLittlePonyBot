@@ -177,7 +177,11 @@ cython_debug/
 .qodo/
 
 .db/
-data/voice_messages/example_voices/voice_30-05-2025_15-27-27.ogg
+**/*.ogg
 
 .data/
 **/*.db
+
+**/*.bin
+**/*.sqlite3
+**/*.pickle

@@ -5,7 +5,7 @@ from aiogram.types import (
     ReplyKeyboardMarkup
 )
 from aiogram.utils.keyboard import InlineKeyboardBuilder
-from Classes.UserProfile import UserProfile
+from Classes.user import UserProfile
 from Classes.enums import Goal
 
 def MainKeyboard() -> ReplyKeyboardMarkup:
