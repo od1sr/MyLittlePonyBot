@@ -178,3 +178,5 @@ cython_debug/
 
 .db/
 data/voice_messages/example_voices/voice_30-05-2025_15-27-27.ogg
+
+.data/

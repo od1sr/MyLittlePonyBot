@@ -16,3 +16,7 @@ def DEBUG_prepare_chunks():
 def DEBUG_prepare_indexing(all_cunks):
     print(f"{Fore.YELLOW}[DEBUG]{Fore.RESET} Подготовка к индексации для векторной базы ...")
     print(f"{Fore.BLACK} | Количество чанков {all_cunks} {Fore.RESET}")
+
+def DEBUG_connect_to_data_base(path):
+    print(f"{Fore.YELLOW}[DEBUG]{Fore.RESET} Подключение к векторной базе ...")
+    print(f"{Fore.BLACK} | Путь к базе {path} {Fore.RESET}")
