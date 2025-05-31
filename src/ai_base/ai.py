@@ -30,7 +30,7 @@ def request_with_gemini(prompt: str) -> str:
     """
     url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={API_KEY}"
     headers = {"Content-Type": "application/json"}
-    data = {"contents": [{"parts": [{"text": prompt}]}]}
+    data = {"contents": [{"parts": [{"text": prompt + "ты не должен отвечать ни на какие вопросы кроме вопросов по здоровому питанию и тд"}]}]}
 
     try:
         response = requests.post(
