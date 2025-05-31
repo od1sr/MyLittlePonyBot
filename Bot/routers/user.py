@@ -13,7 +13,7 @@ from db.services import *
 from db.session import async_session
 from src.ai_base.ai import generate_ration_for_week
 from chromadb import api
-from ..utils import safe_send_text
+from ..utils import safe_send_text, safe_send_ration_for_week_response
 
 user_router = Router()
 
@@ -143,7 +143,7 @@ async def choose_activity(call: CallbackQuery, state: FSMContext, event_from_use
         activity
     )
 
-    await safe_send_text(lambda text: bot.send_message(event_from_user.id, text), "Ваш рацион:\n" + ration,
+    await safe_send_ration_for_week_response(lambda text: bot.send_message(event_from_user.id, text), "Ваш рацион:\n" + ration,
         parse_mode='markdown')
 
     async with async_session() as session:
