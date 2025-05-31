@@ -1,45 +1,46 @@
-def cut_text_with_week(text: str) -> dict:
-    """Разбивает текст на недели"""
-    data = {
-        "recomendations": "",
-        "days": {}
+def parse_weekly_menu(text: str) -> dict:
+    """
+    Парсит текст с недельным меню и возвращает структурированные данные.
+    Возвращает словарь с днями недели и рекомендациями.
+    """
+    result = {
+        "days": {},
+        "recommendations": ""
     }
-    
-    # Разделяем основную часть и рекомендации
-    parts = text.split("===", maxsplit=1)
-    days_text = parts[0].strip()
+
+    # Разделяем меню и рекомендации
+    parts = text.split("===")
+    menu_text = parts[0].strip()
     
     if len(parts) > 1:
-        data["recomendations"] = parts[1].strip()
+        result["recommendations"] = parts[1].strip()
+
+    # Разбиваем по дням недели
+    day_blocks = [block.strip() for block in menu_text.split("-") if block.strip()]
     
-    # Обрабатываем дни
-    for day_block in days_text.split("-"):
-        if not day_block.strip():
-            continue
-            
-        # Разделяем название дня и содержание
-        day_parts = day_block.split(":", maxsplit=1)
-        if len(day_parts) < 2:
-            continue
-            
-        day_name = day_parts[0].strip()
-        day_content = day_parts[1].strip()
+    for block in day_blocks:
+        # Извлекаем название дня (первая строка до двоеточия)
+        day_lines = block.split('\n')
+        day_name = day_lines[0].replace(':', '').strip()
         
-        data["days"][day_name] = {}
+        # Обрабатываем приемы пищи
+        meals = {}
+        current_meal = None
         
-        # Обрабатываем приёмы пищи
-        for eat_line in day_content.split("\n"):
-            if not eat_line.strip():
+        for line in day_lines[1:]:
+            line = line.strip()
+            if not line:
                 continue
                 
-            # Разделяем название приёма пищи и описание
-            eat_parts = eat_line.split(":", maxsplit=1)
-            if len(eat_parts) < 2:
-                continue
-                
-            eat_name = eat_parts[0].strip()
-            eat_description = eat_parts[1].strip()
-            
-            data["days"][day_name][eat_name] = eat_description
-    
-    return data
+            # Если строка начинается с приема пищи (содержит двоеточие)
+            if ':' in line:
+                meal_parts = line.split(':', 1)
+                current_meal = meal_parts[0].strip()
+                meals[current_meal] = meal_parts[1].strip()
+            elif current_meal:
+                # Продолжение описания предыдущего приема пищи
+                meals[current_meal] += '\n' + line
+        
+        result["days"][day_name] = meals
+
+    return result
