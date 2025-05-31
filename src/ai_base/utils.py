@@ -61,20 +61,25 @@ def chunk_text(text: str, chunk_size: int = ConvertingConfig.CHUNK_SIZE) -> List
     return [' '.join(words[i:i + chunk_size]) for i in range(0, len(words), chunk_size)]
 
 
+
 def is_db_created(path: str = "./") -> bool:
     """Проверяет, создана ли база данных"""
     return os.path.exists(path+ConvertingConfig.CHROMA_DB_PATH)
+
+
 
 def get_db_collection() -> api.Collection:
     """Возвращает коллекцию из базы данных"""
     DEBUG_connect_to_data_base(ConvertingConfig.CHROMA_DB_PATH)
     client = PersistentClient(path=ConvertingConfig.CHROMA_DB_PATH)
+    DEBUG_connect_succes()
     return client.get_collection(
         name=ConvertingConfig.CHROMA_COLLECTION,
-        embedding_function=embedding_functions.SentenceTransformerEmbeddingFunction(
-            model_name=ConvertingConfig.EMBEDDING_MODEL
+        embedding_function = embedding_functions.SentenceTransformerEmbeddingFunction(
+            model_name = ConvertingConfig.EMBEDDING_MODEL
         )
     )
+
 
 
 def create_vector_db(texts: List[str]) -> Client:
@@ -179,8 +184,7 @@ def rag_answer(question: str, collection: Client) -> Optional[str]:
         for text, meta in zip(results['documents'][0], results['metadatas'][0])
     ])
 
-    prompt = f"""Ты - эксперт по питанию и диетологии. Ответь на вопрос, используя только предоставленную информацию.
-Если информации для ответа недостаточно, то можешь ее чутка додумать или скажи "В моих материалах нет точного ответа на этот вопрос".
+    prompt = f"""Ты - эксперт по питанию и диетологии
 
 Контекст:
 {context}
@@ -191,3 +195,4 @@ def rag_answer(question: str, collection: Client) -> Optional[str]:
 Ответ:"""
 
     return prompt
+

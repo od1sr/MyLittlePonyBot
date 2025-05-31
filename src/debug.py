@@ -19,4 +19,7 @@ def DEBUG_prepare_indexing(all_cunks):
 
 def DEBUG_connect_to_data_base(path):
     print(f"{Fore.YELLOW}[DEBUG]{Fore.RESET} Подключение к векторной базе ...")
-    print(f"{Fore.BLACK} | Путь к базе {path} {Fore.RESET}")
+    print(f"{Fore.BLACK} | Путь к базе: {path} {Fore.RESET}")
+
+def DEBUG_connect_succes():
+    print(f"{Fore.GREEN}[DEBUG]{Fore.RESET} Подключение к векторной базе успешно!")
